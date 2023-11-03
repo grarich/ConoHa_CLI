@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+  title: Identity API
+  description: Identity API
+  version: 1.0.0
+servers:
+  - url: 'https://identity.tyo2.conoha.io'
+paths:
+  /:
+    get:
+      summary: バージョン情報取得
+      responses:
+        300:
+          $ref: "#/components/schemas/IdentityResponse"
+
+  /v2.0:
+    get:
+      summary: バージョン情報詳細取得
+      responses:
+        200:
+          description: 正常
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdentityV2Response"
+
+  /v2.0/tokens:
+    post:
+      summary: 有効なトークン情報を取得する
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth:
+                  properties:
+                    passwordCredentials:
+                      properties:
+                        username:
+                          type: "string"
+                          description: ユーザー名
+                        password:
+                          type: "string"
+                          description: ユーザーパスワード
+                      type: "object"
+                    tenantId:
+                      type: "string"
+                      description: テナントID
+                  type: "object"
+
+      responses:
+        200:
+          description: 正常
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IdentityV2AccessTokenResponse"
+
+
+components:
+  schemas:
+    IdentityResponse:
+      type: object
+      properties:
+        versions:
+          properties:
+            values:
+              type: "array"
+              items:
+                type: "object"
+                properties:
+                  id:
+                    type: "string"
+                  links:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        href:
+                          type: "string"
+                        rel:
+                          type: "string"
+                  media-types:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        base:
+                          type: "string"
+                  status:
+                    type: "string"
+                  updated:
+                    type: "string"
+          type: "object"
+
+    IdentityV2Response:
+      type: object
+      properties:
+        version:
+          properties:
+            status:
+              type: "string"
+            updated:
+              type: "string"
+            media-types:
+              type: "array"
+              items:
+                type: "object"
+                properties:
+                  base:
+                    type: "string"
+            id:
+              type: "string"
+            links:
+              type: "array"
+              items:
+                type: "object"
+                properties:
+                  href:
+                    type: "string"
+                  rel:
+                    type: "string"
+          type: "object"
+
+    IdentityV2AccessTokenResponse:
+      type: object
+      properties:
+        access:
+          properties:
+            token:
+              properties:
+                issued_at:
+                  type: "string"
+                expires:
+                  type: "string"
+                id:
+                  type: "string"
+                tenant:
+                  properties:
+                    domain_id:
+                      type: "string"
+                    description:
+                      type: "string"
+                    enabled:
+                      type: "boolean"
+                    id:
+                      type: "string"
+                    name:
+                      type: "string"
+                  type: "object"
+                audit_ids:
+                  type: "array"
+                  items:
+                    type: "string"
+              type: "object"
+            serviceCatalog:
+              type: "array"
+              items:
+                type: "object"
+                properties:
+                  endpoints:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        region:
+                          type: "string"
+                        publicURL:
+                          type: "string"
+                  endpoints_links:
+                    type: "array"
+                    items:
+                      type: "null"
+                  type:
+                    type: "string"
+                  name:
+                    type: "string"
+            user:
+              properties:
+                username:
+                  type: "string"
+                roles_links:
+                  type: "array"
+                  items:
+                    type: "null"
+                id:
+                  type: "string"
+                roles:
+                  type: "array"
+                  items:
+                    type: "object"
+                    properties:
+                      name:
+                        type: "string"
+                name:
+                  type: "string"
+              type: "object"
+            metadata:
+              properties:
+                is_admin:
+                  type: "number"
+                roles:
+                  type: "array"
+                  items:
+                    type: "string"
+              type: "object"
+          type: "object"
