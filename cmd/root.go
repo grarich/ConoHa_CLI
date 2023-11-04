@@ -1,3 +1,4 @@
+// Package cmd
 /*
 Copyright © 2023 grarich <grarich@grawlily.com>
 */
